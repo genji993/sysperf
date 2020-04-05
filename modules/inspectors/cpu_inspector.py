@@ -3,6 +3,8 @@ import logging
 import os
 import psutil
 
+__all__ = ['CPUInspector']
+
 class CPUInspector(AbstractInspector):
 
     def __init__(self):
