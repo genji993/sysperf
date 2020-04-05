@@ -1,23 +1,7 @@
-import os
-import sys
+from .inspector import AbstractInspector
 import logging
+import os
 import psutil
-
-
-class AbstractInspector:
-
-    def __init__(self, name):
-        logging.basicConfig(level='INFO', format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
-        self.__inspector_name = name
-        logging.info("{} started...".format(self.__inspector_name))
-
-    def inspect(self) -> dict:
-        raise NotImplementedError
-
-    @property
-    def inspector_name(self):
-        return self.__inspector_name
-
 
 class CPUInspector(AbstractInspector):
 
@@ -42,14 +26,13 @@ class CPUInspector(AbstractInspector):
         _task_info['MemoryPercent'] = round(_task.memory_percent(), 2)
         _task_info['Tasks'] = list()
         for _p in _ppids_map.items():
-            if _p[1] == _pid:  # If am I parent of someone else append to me somene else informations
+            if _p[1] == _pid:  # If I am parent of someone else append to me somene else informations
                 _task_info['Tasks'].append(self.__get_task_info(_p[0], _ppids_map, _tracked_list))
                 _tracked_list.append(_p[0])
 
         return _task_info
 
     def __processes(self) -> list:
-
         _tasks = list()
         _tracked_list = list()
         _pids_list = psutil.pids()
@@ -58,8 +41,3 @@ class CPUInspector(AbstractInspector):
             if _pid not in _tracked_list:
                 _tasks.append(self.__get_task_info(_pid, _ppids_map, _tracked_list))
         return _tasks
-
-
-class RAMInspector(AbstractInspector):
-    def __init__(self):
-        super().__init__("RAMInspector")
