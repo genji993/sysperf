@@ -31,7 +31,6 @@ class CPUInspector(AbstractInspector):
             if _p[1] == _pid:  # If I am parent of someone else append to me somene else informations
                 _task_info['Tasks'].append(self.__get_task_info(_p[0], _ppids_map, _tracked_list))
                 _tracked_list.append(_p[0])
-
         return _task_info
 
     def __processes(self) -> list:
